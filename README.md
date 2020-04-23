@@ -10,7 +10,7 @@ Specifically designed tools for predicting and identifying phage in metagenomes 
 | MARVEL | https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6090037/ | https://github.com/LaboratorioBioinformatica/MARVEL |
 | MetaPhinder | https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5042410/ | https://github.com/vanessajurtz/MetaPhinder, https://cge.cbs.dtu.dk/services/MetaPhinder/
 | ~Metavir2~ | ~https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4002922/~ ||
-| PHACCS | ~https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4002922/~ | https://sourceforge.net/projects/phaccs/files/ |
+| PHACCS | ~https://www.ncbi.nlm.nih.gov/pmc/articles/PMC555943/~ | https://sourceforge.net/projects/phaccs/files/ |
 | ~Phage Eco-Locator~ | ~https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3194218/~ ||
 | PhaMers | https://www.biorxiv.org/content/10.1101/169672v1 | https://github.com/jondeaton/PhaMers |
 | PHASTER | https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4987931/ | https://phaster.ca/ |
