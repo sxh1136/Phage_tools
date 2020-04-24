@@ -3,6 +3,7 @@ Specifically designed tools for predicting and identifying phage in metagenomes 
 
 | Software |Released | Reference | Available at: |
 | -------- | --------------- | --------- | ------------- |
+| Cenote-Taker2 | 2020 | https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7000223/ | https://github.com/mtisza1/Cenote-Taker2 |
 | DeepVirFinder | 2018 | https://link.springer.com/article/10.1007/s40484-019-0187-4 | https://github.com/jessieren/DeepVirFinder |
 | FastViromeExplorer | 2018 | https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5768174/ | https://code.vt.edu/saima5/FastViromeExplorer |
 | HoloVir | 2016 | https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6323928/ | https://github.com/plaffy/HoloVir |
