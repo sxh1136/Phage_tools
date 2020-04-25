@@ -17,6 +17,7 @@ Specifically designed tools for predicting and identifying phage in metagenomes 
 | PHASTER | 2016 | https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4987931/ | https://phaster.ca/ |
 | Phigaro | 2019 | https://academic.oup.com/bioinformatics/article/doi/10.1093/bioinformatics/btaa250/5822875 | https://pypi.org/project/phigaro/ |
 | PPR-Meta | 2019 | https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6586199/ | https://github.com/zhenchengfang/PPR-Meta |
+| Seeker | 2020 | https://www.biorxiv.org/content/10.1101/2020.04.04.025783v2 | https://github.com/gussow/seeker |
 | vConTACT2 | 2019 | https://www.nature.com/articles/s41587-019-0100-8 | https://bitbucket.org/MAVERICLab/vcontact2/wiki/Home |
 | VIBRANT | 2020 | https://www.biorxiv.org/content/10.1101/855387v1 | https://github.com/AnantharamanLab/VIBRANT |
 | VIP | 2016 | https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4824449/ | https://github.com/keylabivdc/VIP |
@@ -25,6 +26,7 @@ Specifically designed tools for predicting and identifying phage in metagenomes 
 | VirMAP | 2018 | https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6086868/ | https://github.com/cmmr/VirMAP |
 | virMine | 2019 | https://www.ncbi.nlm.nih.gov/pubmed/30993039 | https://github.com/thatzopoulos/virMine |
 | VirMiner | 2019 | https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6425642/ | https://github.com/TingtZHENG/VirMiner |
+| VirNet | 2018 | https://ieeexplore.ieee.org/document/8639400 | https://github.com/alyosama/virnet |
 | VIROME | 2012 | https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3558967/ | http://virome.dbi.udel.edu/ |
 | ViromeScan | 2016 | https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4774116/ | https://sourceforge.net/projects/viromescan/ |
 | VirSorter | 2015 | https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4451026/ | https://github.com/simroux/VirSorter |
