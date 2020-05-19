@@ -8,7 +8,7 @@ Specifically designed tools for predicting and identifying phage in metagenomes 
 | FastViromeExplorer | Detects viral sequences and predicts their abundance by pseudoalignment of reads to a database. | 2018 | https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5768174/ | https://code.vt.edu/saima5/FastViromeExplorer |
 | HoloVir | Pipeline designed for taxonomic classification and gene function assignment using genomic and marker databases.| 2016 | https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4899465/ | https://github.com/plaffy/HoloVir |
 | MARVEL | Machine learning tool for predicting phage sequences in metagenomic bins. | 2018 | https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6090037/ | https://github.com/LaboratorioBioinformatica/MARVEL |
-| MetaPhinder | https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5042410/ | 2016 | https://github.com/vanessajurtz/MetaPhinder, https://cge.cbs.dtu.dk/services/MetaPhinder/ |
+| MetaPhinder | 2016 | https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5042410/ | https://cge.cbs.dtu.dk/services/MetaPhinder/, https://github.com/vanessajurtz/MetaPhinder |
 | metaViralSPAdes | Identifies viral sequences by leveraging metagenomic assembly graphs and analyzing the variations in depth of coverage between viral and bacterial genomes. Made of three modules, it also calculates the completeness of predicted viral sequences. | 2020 | https://www.ncbi.nlm.nih.gov/pubmed/32413137 | https://github.com/ablab/spades/tree/metaviral_publication |
 | PhaMers | Identifies phage sequences by a machine learning model based on k-mer frequencies. | 2017 | https://www.biorxiv.org/content/10.1101/169672v1 | https://github.com/jondeaton/PhaMers |
 | PHASTER | Web server for identification and annotation of prophages in bacterial genomes and metagenomes | 2016 | https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4987931/ | https://phaster.ca/ |
@@ -28,8 +28,8 @@ Specifically designed tools for predicting and identifying phage in metagenomes 
 | VirSorter | Uses referenced-based and reference-free approaches in unison relying on probabilistic similarity models and referenced based protein homology searches to increase novel virus detection. | 2015 | https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4451026/ | https://github.com/simroux/VirSorter |
 | VirusSeeker | Made up of two BLAST-based pipelines – Virome and Discovery. Virome aligns reads to a curated database to identify viral sequences and compute their abundance in the sample. Discovery focuses on contig-based analysis to aid novel virus discovery. | 2017 | https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5326578/ | https://wupathlabs.wustl.edu/virusseeker/ |
 
-
-| Metavir2 | 2014 | https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4002922/ ||
-| PHACCS | 2005 | https://www.ncbi.nlm.nih.gov/pmc/articles/PMC555943/ | https://sourceforge.net/projects/phaccs/files/ |
-| Phage Eco-Locator | 2011 | ~https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3194218/ ||
-| VMGAP | 2011 | https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3156399/ ||
+Tools that appear to be no longer available
+| Metavir2 | 2014 | https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4002922/ |
+| PHACCS | 2005 | https://www.ncbi.nlm.nih.gov/pmc/articles/PMC555943/ |
+| Phage Eco-Locator | 2011 | ~https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3194218/ |
+| VMGAP | 2011 | https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3156399/ |
