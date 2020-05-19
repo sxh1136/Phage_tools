@@ -2,7 +2,7 @@
 Specifically designed tools for predicting and identifying phage in metagenomes and metaviromes.
 
 | Software | Description | Released | Reference | Available at: |
-| -------- | -------- | --------------- | --------- | ------------- |
+| -------- | ------------- | --------------- | --------- | ------------- |
 | Cenote-Taker2 | Pipeline for annotating contigs with direct terminal repeats and known genes for submission to GenBank.| 2020 | https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7000223/ | https://github.com/mtisza1/Cenote-Taker2 |
 | DeepVirFinder | Predicts viral sequences via a k-mer based deep learning method using convolutional neural networks (CNN). Based on VirFinder. | 2018 | https://link.springer.com/article/10.1007/s40484-019-0187-4 | https://github.com/jessieren/DeepVirFinder |
 | FastViromeExplorer | Detects viral sequences and predicts their abundance by pseudoalignment of reads to a database. | 2018 | https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5768174/ | https://code.vt.edu/saima5/FastViromeExplorer |
@@ -29,8 +29,8 @@ Specifically designed tools for predicting and identifying phage in metagenomes 
 | VirusSeeker | Made up of two BLAST-based pipelines – Virome and Discovery. Virome aligns reads to a curated database to identify viral sequences and compute their abundance in the sample. Discovery focuses on contig-based analysis to aid novel virus discovery. | 2017 | https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5326578/ | https://wupathlabs.wustl.edu/virusseeker/ |
 
 Tools that appear to be no longer available
-| Software | Description | Released | Reference | 
-| -------- | -------- | --------------- | --------- |
+| Software | Released | Reference |
+| -------- | -------- | --------------- |
 | Metavir2 | 2014 | https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4002922/ |
 | PHACCS | 2005 | https://www.ncbi.nlm.nih.gov/pmc/articles/PMC555943/ |
 | Phage Eco-Locator | 2011 | ~https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3194218/ |
