@@ -2,7 +2,7 @@
 Specifically designed tools for predicting and identifying phage in metagenomes and metaviromes.
 
 | Software | Description | Released | Reference | Available at: |
-| -------- | -----------‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐ | ---------------‐ | --------- | ------------- |
+| -------- | ------------| -------- | --------- | ------------- |
 | Cenote-Taker2 | Pipeline for annotating contigs with direct terminal repeats and known genes for submission to GenBank.| 2020 | https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7000223/ | https://github.com/mtisza1/Cenote-Taker2 |
 | DeepVirFinder | Predicts viral sequences via a k-mer based deep learning method using convolutional neural networks (CNN). Based on VirFinder. | 2018 | https://link.springer.com/article/10.1007/s40484-019-0187-4 | https://github.com/jessieren/DeepVirFinder |
 | EzMap | Identifies viral genomes by BLAST mapping and estimates genome relative abundance using an Expectation Maximisation algorithm | 2017 | https://pubmed.ncbi.nlm.nih.gov/28383679/ | https://github.com/dekoning-lab/ezmap |
