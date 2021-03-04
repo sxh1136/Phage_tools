@@ -1,5 +1,7 @@
 #!/usr/bin/env python
-
+### Credit for script goes to Alex Reynolds on bioinformatics stack exchange https://bioinformatics.stackexchange.com/questions/13879/how-to-fragment-genomes-into-non-overlapping-sequences-of-differing-sizes
+### For fragmenting genomes uniformly
+### ./fragment_genomes <lower bp bound> <higher bp bound> <file_name>
 import sys
 import numpy as np
 import timeit
