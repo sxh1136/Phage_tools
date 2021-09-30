@@ -1,0 +1,76 @@
+#!/bin/bash
+# Phage genomes released Jan-12 2020 and later downloaded from this link - filtered by complete, host=bacteria/archaea
+https://www.ncbi.nlm.nih.gov/labs/virus/vssi/#/virus?SeqType_s=Nucleotide&SourceDB_s=RefSeq&Completeness_s=complete&HostLineage_ss=Bacteria%20(eubacteria),%20taxid:2&HostLineage_ss=Archaea,%20taxid:2157&VirusLineage_ss=Viruses,%20taxid:10239&CreateDate_dt=2018-01-01T00:00:00.00Z%20TO%202021-08-12T23:59:59.00Z
+1839 phage sequences
+10 archael virus sequences
+# Phage genomes pre 2018 downloaded from here, same filters as above
+https://www.ncbi.nlm.nih.gov/labs/virus/vssi/#/virus?SeqType_s=Nucleotide&SourceDB_s=RefSeq&Completeness_s=complete&HostLineage_ss=Bacteria%20(eubacteria),%20taxid:2&HostLineage_ss=Archaea,%20taxid:2157&VirusLineage_ss=Viruses,%20taxid:10239&CreateDate_dt=1700-01-01T00:00:00.00Z%20TO%202020-01-11T23:59:59.00Z2251 sequences
+2532 phage sequences
+80 archaeal virus sequences
+
+# Download bacterial/archaeal refseq genomes assembly summary
+# Seperated files for pre and post 01-12-2020
+# Extract ftp columns
+awk -F"\t" '{print $20}' bacterial_assembly_summary_post2020.txt > bacterial_post2020_ftplinks.txt
+awk -F"\t" '{print $20}' archaeal_assembly_summary_post2020.txt > archaeal_post2020_ftplinks.txt
+# Append fna suffix to get full download link
+awk -i inplace 'BEGIN{FS=OFS="/";filesuffix="genomic.fna.gz"}{ftpdir=$0;asm=$10;file=asm"_"filesuffix;print ftpdir,file}' bacterial_post2020_ftplinks.txt
+awk -i inplace 'BEGIN{FS=OFS="/";filesuffix="genomic.fna.gz"}{ftpdir=$0;asm=$10;file=asm"_"filesuffix;print ftpdir,file}' archaeal_post2020_ftplinks.txt
+parallel -j 50 wget < bacteriaftplinks.txt
+cat *fna.gz > bacteria_refseq_pre2020_complete.fna
+# Get rid of spaces and quotes
+sed -i 's/ /_/g' bacteria_refseq_pre2020_complete.fna
+sed -i "s/'//g" bacteria_refseq_pre2020_complete.fna
+#Get headers for bacterial plasmids pre 2020
+grep ">" bacteria_refseq_pre2020_complete.fna| grep "plasmid" > bacteria_plasmid_pre2020_names.txt
+
+
+
+
+
+# Grab training data for all machine/deep learning tools, combine with pre 2020 refseq data and dereplicate
+# VirFinder and DeepVirFinder
+VirFinder and DeepVirFinder have the same training set which is from refseq.
+
+# PPR Meta training sequences
+http://cqb.pku.edu.cn/ZhuLab/PPR_Meta/data/train100to400.zip
+http://cqb.pku.edu.cn/ZhuLab/PPR_Meta/data/train401to800.zip
+http://cqb.pku.edu.cn/ZhuLab/PPR_Meta/data/train5000to10000.zip
+http://cqb.pku.edu.cn/ZhuLab/PPR_Meta/data/train801to1200.zip
+
+for i in train*;do mv ${i}/phage_train-Exact.* .;done
+for i in train*;do mv ${i}/ProphET_train-Exact* .;done
+for i in train*;do mv ${i}/chromosome_train-Exact* .;done
+for i in train*;do mv ${i}/plasmid_train-Exact* .;done
+
+cat phage_train-Exact.f* ProphET_train-Exact.f* > ppr_meta_phage_training.fna
+cat plasmid_train-Exact.f* > ppr_meta_plasmid_training.fna
+cat chromo_train-Exact.f* > ppr_meta_chr_training.fna
+
+# Seeker ncbi accessions from supplementary data. <10,000 sequeces. Split into 2000 accessions chunks and download from batch entrez
+https://academic.oup.com/nar/article/48/21/e121/5921300#217920816
+https://www.ncbi.nlm.nih.gov/sites/batchentrez
+cat seeker* > seeker_phage_training.fasta
+#Seeker host genomes - training data for bacteria contains chromosomes and plasmids
+https://www.ncbi.nlm.nih.gov/sites/batchentrez
+
+# Marvel training sequences available at http://projetos.lbi.iq.usp.br/metazoo/deyvid/datasets/
+cat *caudo* > marvel_phage_training.fasta
+cat *bac* > marvel_host_training.fasta
+
+# Vibrant training sequence extraction. Authors sent me training/testing data combined - supp file 8 has list of training sequences
+sed -i 's/~/_/g' machine_viruses_combined_no-frags.appended.fna
+sed -i 's/,//g' machine_viruses_combined_no-frags.appended.fna
+sed -i -E "s/'//g" machine_viruses_combined_no-frags.appended.fna
+filterbyname.sh in=machine_viruses_combined_no-frags.appended.fna names=vibrant_training_genomes out=vibrant_virus_training.fasta include=t
+# repeat above for bacteria and plasmid sets
+
+# Set cretion - removing duplicates
+# No duplicates in post phage set
+dedupe.sh in=phage_post-2018.fasta out=phage_post-2018_set.fasta ac=f
+# 3 duplicates in pre phage set - 105469 bases
+dedupe.sh in=phage_pre-2018.fasta out=phage_pre-2018_set.fasta ac=f
+# Set union - 4 duplicates - 243505 bases
+dedupe.sh in=phage_pre-2018.fasta,phage_post-2018.fasta out=phage_union.fasta ac=f
+# Subtract pre sequences from union. 5 sequences removed - 1 exact duplicate
+dedupe.sh in=phage_pre-2018_set.fasta,phage_union.fasta out=phage_post-minus-pre.fa uniqueonly minidentity=95
