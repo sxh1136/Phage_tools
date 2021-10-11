@@ -3,10 +3,7 @@
 https://www.ncbi.nlm.nih.gov/labs/virus/vssi/#/virus?SeqType_s=Nucleotide&SourceDB_s=RefSeq&Completeness_s=complete&HostLineage_ss=Bacteria%20(eubacteria),%20taxid:2&HostLineage_ss=Archaea,%20taxid:2157&VirusLineage_ss=Viruses,%20taxid:10239&CreateDate_dt=2018-01-01T00:00:00.00Z%20TO%202021-08-12T23:59:59.00Z
 1839 phage sequences
 10 archael virus sequences
-# Phage genomes pre 2018 downloaded from here, same filters as above
-https://www.ncbi.nlm.nih.gov/labs/virus/vssi/#/virus?SeqType_s=Nucleotide&SourceDB_s=RefSeq&Completeness_s=complete&HostLineage_ss=Bacteria%20(eubacteria),%20taxid:2&HostLineage_ss=Archaea,%20taxid:2157&VirusLineage_ss=Viruses,%20taxid:10239&CreateDate_dt=1700-01-01T00:00:00.00Z%20TO%202020-01-11T23:59:59.00Z2251 sequences
-2532 phage sequences
-80 archaeal virus sequences
+
 
 # Download bacterial/archaeal refseq genomes assembly summary
 # Seperated files for pre and post 01-12-2020
@@ -24,9 +21,17 @@ sed -i "s/'//g" bacteria_refseq_pre2020_complete.fna
 #Get headers for bacterial plasmids pre 2020
 grep ">" bacteria_refseq_pre2020_complete.fna| grep "plasmid" > bacteria_plasmid_pre2020_names.txt
 
-
-
-
+# Post 2020 refseq counts
+Archaea chromosomes
+20
+Baterial chromosomes
+3626
+Archaea plasmids
+22
+Bacterial plasmids
+4431
+Phage
+901
 
 # Grab training data for all machine/deep learning tools, combine with pre 2020 refseq data and dereplicate
 # VirFinder and DeepVirFinder
@@ -65,12 +70,124 @@ sed -i -E "s/'//g" machine_viruses_combined_no-frags.appended.fna
 filterbyname.sh in=machine_viruses_combined_no-frags.appended.fna names=vibrant_training_genomes out=vibrant_virus_training.fasta include=t
 # repeat above for bacteria and plasmid sets
 
+
+# Combine pre 2020 sequences with training data
+cat all_phage_training_sets.fasta refseq_sequences/pre2020/phage/phage_refseq_pre2020.fasta > phage_refseq-pre2020_training_sets.fasta
+
 # Set cretion - removing duplicates
-# No duplicates in post phage set
-dedupe.sh in=phage_post-2018.fasta out=phage_post-2018_set.fasta ac=f
-# 3 duplicates in pre phage set - 105469 bases
-dedupe.sh in=phage_pre-2018.fasta out=phage_pre-2018_set.fasta ac=f
-# Set union - 4 duplicates - 243505 bases
-dedupe.sh in=phage_pre-2018.fasta,phage_post-2018.fasta out=phage_union.fasta ac=f
-# Subtract pre sequences from union. 5 sequences removed - 1 exact duplicate
-dedupe.sh in=phage_pre-2018_set.fasta,phage_union.fasta out=phage_post-minus-pre.fa uniqueonly minidentity=95
+# Removing dupes from within pre and post sets
+dedupe.sh in=phage_refseq_post2020.fasta out=phage_refseq_post2020_set.fasta ac=f
+dedupe.sh -Xmx80G in=phage_refseq-pre2020_training_sets.fasta out=phage_refseq-pre2020_training_sets_set.fasta ac=f
+# Create set union between pre and post 2020
+dedupe.sh -Xmx80G in=phage_refseq-pre2020_training_sets_set.fasta,phage_refseq_post2020_set.fasta out=phage_union_pre-post2020.fasta ac=f
+# Minus pre sequences from union to create dereplicated post 2020 sequences.
+dedupe.sh -Xmx80G in=phage_refseq-pre2020_training_sets_set.fasta,phage_union_pre-post2020.fasta out=phage_refseq_post2020_dereplicated.fasta uniqueonly minidentity=95
+
+# Subsample bacterial and arachael chromosome and plasmid sequences by 1/14.3
+for i in *fasta;do reformat.sh sampleseed=1234 samplerate=0.0699 in=${i} out=${i/.fasta/_sub.fasta};done
+
+253 Chromosomes
+309 Plasmids
+901 Phages
+
+# Removing prophages with phigaro
+phigaro -f host_chr_refseq_post2020_derep_sub.fasta -e bed -o host_chr_refseq_phigaro -t 16
+
+552 prophages found in chromosomal dataset
+30 prophages in plasmid dataset
+
+# Index fasta file
+samtools faidx host_chr_refseq_post2020_derep_sub.fasta
+# Create genomeFile
+awk -v OFS='\t' {'print $1,$2'} host_chr_refseq_post2020_derep_sub.fasta.fai | sort > host_chr_phigaro_genomeFile.txt
+# Sort bed file by genomeFile
+bedtools sort -faidx host_chr_phigaro_genomeFile.txt -i host_chr_refseq_post2020_derep_sub.phigaro.bed > host_chr_refseq_post2020_derep_sub.phigaro_sorted.bed
+# Create a bed file of phigaro non prophage regions
+bedtools complement -i host_chr_refseq_post2020_derep_sub.phigaro_sorted.bed -g host_chr_phigaro_genomeFile.txt > host_chr_phigaro_bedtools_complement.bed
+# Get non prophage (bacteria/archaea chromosome/plasmid) fasta file
+bedtools getfasta -fi host_chr_refseq_post2020_derep_sub.fasta -bed host_chr_phigaro_bedtools_complement.bed -fo host_chr_refseq_post2020_derep_sub.phigaro.fasta
+
+# Remove colons from headers
+sed -i 's/:/_/g' host_chr_refseq_post2020_derep_sub.phigaro.fasta
+# Split fasta file
+faidx --split-files host_chr_refseq_post2020_derep_sub.phigaro.fasta
+# Run PhageBoost on indivual fasta files
+ls *.fasta | parallel -j 8 'PhageBoost -f {} -o {}_pb'
+
+1536 prophages in chromosomal dataset
+61 prophages in plasmid dataset
+
+cat *pb/fasta > host_chr_phigaro.fasta
+minimap2 -x asm5 -a --secondary=no -o host_plasmid_phigaro_pb.sam  host_plasmid_refseq_post2020_derep_sub_phigaro.fasta host_plasmid_pb-calls.fasta
+samtools view -Sb host_chr_phigaro_pb.sam -o host_chr_phigaro_pb.bam
+bamToBed -i host_chr_phigaro_pb.bam > host_chr_phigaro_pb.bed
+sort -k1,1 -k2,2n host_chr_phigaro_pb.bed > host_chr_phigaro_pb_sorted.bed
+awk -v OFS='\t' {'print $1,$2'} host_chr_refseq_post2020_derep_sub.phigaro.fasta.fai | sort > host_chr_phigaro_genomeFile.txt
+bedtools complement -i host_chr_phigaro_pb_sorted.bed -g host_chr_phigaro_genomeFile.txt > host_chr_phigaro_pb_complement.bed
+bedtools getfasta -fi host_plasmid_refseq_post2020_derep_sub_phigaro.fasta -bed phageboost/host_plasmid_phigaro_pb_complement.bed -fo host_plasmid_refseq_post2020_derep_sub.phigaro_pb.fasta
+
+2307 chromosomal contigs
+400 plasmid contigs
+901 phage genomes
+
+# bp before and after phigaro and phageboost
+Chromosomal - 1,011,740,231bp -> 946,233,859bp = 6.47% decrease
+Plasmid - 28,782,822 -> 23,922,434 = 16.9% decrease 
+
+
+./fragment_genomes.py 1000 15000 ../host_chr_refseq_post2020_derep_sub.phigaro_pb.fasta > host_chr_refseq_post2020_derep_sub.phigaro_pb_fragments.fasta
+
+118,204 chromosomal fragments
+3021 plasmid fragments
+6664 phage fragments
+
+# Chromosome fragment checkv - viral genes
+cut -f6 quality_summary.tsv| sort | uniq -c
+
+114083 0
+  3598 1
+   355 2
+   107 3
+    34 4
+    15 5
+     4 6
+     4 7
+     2 8
+     1 10
+     1 11
+
+# Chromosome fragment checkv - viral genes
+cut -f6 quality_summary.tsv| sort | uniq -c
+
+2667 0
+ 240 1
+  65 2
+  25 3
+   9 4
+   6 5
+   7 6
+   1 7
+   1 9
+
+# VirSorter2 2.2.3
+time virsorter run -w phage_vs2.out -i phage_fragment_set.fasta --provirus-off -j 16
+Phage - 3:47:06.00
+
+# DVF v1.0
+time python /home/ubuntu/sdb/software/DeepVirFinder/dvf.py -i phage_fragment_set.fasta -o phage_dvf/ -c 16
+Phage - 16:51.58
+
+# ViralVerify v1.1
+# Use nbc_hmm.hmms file - database of virus/chromosome-specific HMMs
+time /home/ubuntu/sdb/software/viralVerify-1.1/bin/viralverify -f phage_fragment_set.fasta -o phage_viralverify_nbc --hmm ~/sdb/software/viralVerify-1.1/db/nbc_hmms.hmm -t 16
+Phage -  37:24.94
+  ## viralverify with pfam
+  time /home/ubuntu/sdb/software/viralVerify-1.1/bin/viralverify -f phage_fragment_set.fasta -o phage_Pfam_viralverify --hmm ~/sdb/software/viralVerify-1.1/db/Pfam-A.hmm -t 16
+  Phage - 1:13:57.85
+
+# Virsorter v1.06 with diamond, virome decomtamination and viromedb
+time wrapper_phage_contigs_sorter_iPlant.pl -f phage_fragment_set.fasta --virome --db 2 --diamond --wdir Phage_virome_virsorter --ncpu 16 --data-dir ~/sdb/software/VirSorter/virsorter-data
+Phage - 2:53:55.93
+
+# Vibrant v1.2.1
+time python3 /home/ubuntu/sdb/software/VIBRANT/VIBRANT_run.py -t 16 -folder phage_virome_vibrant/ -d /home/ubuntu/sdb/software/VIBRANT/databases -m /home/ubuntu/sdb/software/VIBRANT/files -no_plot -i phage_fragment_set.fasta
