@@ -3,27 +3,19 @@
 ## DeepVirFinder
 **Default settings.**
 ```
-Python dvf.py -i file.fasta -o dvf/ -c 8
+Python dvf.py -i file.fasta -o dvf_out/ -c 16
+```
+
+## Kraken2
+**Run with kraken2-microbial database available at https://lomanlab.github.io/mockcommunity/mc_databases.html**
+```
+kraken2 --db kraken2-microbial/ file.fasta --output kraken2_out/ --threads 16
 ```
 
 ## MetaPhinder
 **Default settings.**
 ```
-python2 MetaPhinder.py -i file.fasta -o file_out -d database/ALL_140821_hr -b metaphinder/bin/
-```
-
-## MARVEL
-**Rename fasta headers to contig1..contig2..contig3.. so MARVEL can handle it**
-```
-awk '/^>/{print ">contig" ++i; next}{print}' < file.fasta > file_short_headers.fasta
-```
-**Split multifasta into individual fasta files**
-```
-awk '/^>/ {OUT=substr($0,2) ".fa"}; OUT {print >OUT}' file_short_headers.fasta
-```
-**Loop MARVEL with default setting over each fasta**
-```
-for i in contig*; do python3 marvel_bins.py -i ${i} -t 8;done
+python2 MetaPhinder.py -i file.fasta -o metaphinder_out -d database/ALL_140821_hr -b metaphinder/bin/
 ```
 
 ## PPR_Meta
@@ -41,17 +33,18 @@ predict-metagenome file.fasta > file.seeker.
 ## VIBRANT
 **Default settings.**
 ```
-VIBRANT_run.py -i file.fasta -t 8 -virome -folder vibrant/ -d VIBRANT/databases -m VIBRANT/files
+VIBRANT_run.py -i file.fasta -t 16 -folder vibrant/ -d VIBRANT/databases -m VIBRANT/files
 ```
 **Virome decontaination mode on. (Run for phage sample only).**
 ```
-VIBRANT_run.py -i file.fasta -t 8 -virome -folder vibrant_virome/ -d VIBRANT/databases -m VIBRANT/files
+VIBRANT_run.py -i file.fasta -t 16 -virome -folder vibrant_virome/ -d VIBRANT/databases -m VIBRANT/files
 ```
 
 ## ViralVerify (MetaViralSPAdes)
 **Default settings and PFAM 33.0 database.**
 ```
-viralverify.py -f file.fasta -o viralverify/ --hmm PfamA.hmm -t 8
+viralverify.py -f file.fasta -o viralverify/ --hmm viralVerify_nbc -t 16
+viralverify.py -f file.fasta -o viralverify/ --hmm PfamA.hmm -t 16
 ```
 
 ## VirFinder
@@ -61,17 +54,17 @@ predResult <- parVF.pred.R("file.fasta ")
 ```
 
 ## VirSorter
-**Default settings.**
+**Run with diamond and viromedb**
 ```
-wrapper_phage_contigs_sorter_iPlant.pl -f file.fasta --db 1 –wdir virsorter-file/ --ncpu 8 --data-dir virsorter-data/
+wrapper_phage_contigs_sorter_iPlant.pl -f file.fasta --db 2 –wdir virsorter-file/ --ncpu 16 --data-dir virsorter-data/
 ```
 **Virome decontaination mode on. (Run for phage sample only).**
 ```
-wrapper_phage_contigs_sorter_iPlant.pl -f file.fasta --virome --db 1 --wdir virsorter-file/ --ncpu 8 --data-dir virsorter-data/
+wrapper_phage_contigs_sorter_iPlant.pl -f file.fasta --virome --db 2 --wdir virsorter-file/ --ncpu 16 --data-dir virsorter-data/
 ```
 
 ## VirSorter2
 **Default settings with provirus detection off.**
 ```
-virsorter run -w file.out -i file.fasta --provirus-off -j 8
+virsorter run -w file.out -i file.fasta --provirus-off -j 16
 ```
