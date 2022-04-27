@@ -54,7 +54,7 @@ predResult <- parVF.pred.R("file.fasta ")
 ```
 
 ## VirSorter v1.06
-**Run with diamond and viromedb**
+**Run with Diamond and viromeDB**
 ```
 wrapper_phage_contigs_sorter_iPlant.pl -f file.fasta --db 2 –wdir virsorter-file/ --ncpu 16 --data-dir virsorter-data/
 ```
